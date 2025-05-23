@@ -1,54 +1,68 @@
-# React + TypeScript + Vite
+# 🚀 OptiTrack – Cartographie Logistique Intelligente
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Bienvenue dans **OptiTrack**, une solution SaaS complète et ultra professionnelle conçue pour **visualiser, suivre et optimiser les flux logistiques** en temps réel.
 
-Currently, two official plugins are available:
+🔗 [Demo à venir] – Contactez-nous pour un accès privé
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🧭 Présentation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**OptiTrack** permet de :
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- Visualiser les livraisons sur une **carte mondiale interactive**
+- Gérer les expéditions, les clients, les entrepôts et les statuts
+- Suivre les performances par pays, statut, période ou client
+- Générer des rapports PDF ultra stylés pour chaque expédition
+- Sécuriser l'accès selon le **rôle métier** (intérimaire, REX, QHSE…)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠️ Stack technique
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+| Frontend           | Backend              | Données & Auth        | Cartographie        | PDF |
+|--------------------|----------------------|------------------------|----------------------|-----|
+| React + TypeScript | Supabase             | Supabase Auth + Postgres | Leaflet (`react-leaflet`) | `@react-pdf/renderer` |
+| Tailwind CSS       | Supabase Storage     | Row-Level Security (RLS) | Vue entrepôt + mondiale | Téléchargement direct |
+
+---
+
+## 📌 Fonctionnalités déjà en place
+
+✅ Authentification sécurisée avec rôles  
+✅ Interface multi-layouts (Public / Client / Admin)  
+✅ Carte interactive : entrepôt + monde (filtrable mois/année)  
+✅ Top destinations & stats connectées  
+✅ Tableau de bord dynamique filtrable (statut, pays, client, période)  
+✅ Export PDF professionnel (logo, signature, totaux, tableau, footer)
+
+---
+
+## 📦 Roadmap à venir
+
+- [ ] Recherche intelligente globale (multi-champs, flou)
+- [ ] Alertes colis inactifs (+ e-mail automatique)
+- [ ] Journal d’activité (logs utilisateurs)
+- [ ] Dashboard analytique (recharts/nivo)
+- [ ] Timeline par expédition + fiche détaillée
+- [ ] Mode PWA partiel (scan hors-ligne pour intérimaires)
+- [ ] Droits d’accès ultra-fins par rôle
+- [ ] Archivage automatique après X jours
+
+---
+
+## 🎨 Aperçu UI/UX
+
+| Carte mondiale        | Tableau des livraisons     | Export PDF |
+|-----------------------|----------------------------|------------|
+| ![map preview](https://via.placeholder.com/300x150) | ![table preview](https://via.placeholder.com/300x150) | ![pdf preview](https://via.placeholder.com/300x150) |
+
+---
+
+## ⚙️ Démarrer le projet
+
+```bash
+git clone https://github.com/Masterjeremysu/Optitrack.git
+cd optitrack
+npm install
+npm run dev
