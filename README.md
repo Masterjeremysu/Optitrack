@@ -1,68 +1,85 @@
-# 🚀 OptiTrack – Cartographie Logistique Intelligente
+# 📦 OptiTrack – Cartographie Logistique Intelligente
 
-Bienvenue dans **OptiTrack**, une solution SaaS complète et ultra professionnelle conçue pour **visualiser, suivre et optimiser les flux logistiques** en temps réel.
-
-🔗 [Demo à venir] – Contactez-nous pour un accès privé
-
----
-
-## 🧭 Présentation
-
-**OptiTrack** permet de :
-
-- Visualiser les livraisons sur une **carte mondiale interactive**
-- Gérer les expéditions, les clients, les entrepôts et les statuts
-- Suivre les performances par pays, statut, période ou client
-- Générer des rapports PDF ultra stylés pour chaque expédition
-- Sécuriser l'accès selon le **rôle métier** (intérimaire, REX, QHSE…)
+Bienvenue dans **OptiTrack**, la solution SaaS de nouvelle génération pour la **visualisation, le suivi et l'analyse des livraisons** en temps réel.  
+Pensé pour les **responsables logistiques**, chefs d'équipe et dirigeants exigeants, OptiTrack permet de transformer un entrepôt ou un réseau d’expéditions en **carte vivante et interactive**.
 
 ---
 
-## 🛠️ Stack technique
+## 🚀 Fonctionnalités principales
 
-| Frontend           | Backend              | Données & Auth        | Cartographie        | PDF |
-|--------------------|----------------------|------------------------|----------------------|-----|
-| React + TypeScript | Supabase             | Supabase Auth + Postgres | Leaflet (`react-leaflet`) | `@react-pdf/renderer` |
-| Tailwind CSS       | Supabase Storage     | Row-Level Security (RLS) | Vue entrepôt + mondiale | Téléchargement direct |
+### 🧭 Carte interactive mondiale
+- Affiche les destinations des colis en temps réel
+- Filtres puissants : par mois, année, pays, statut, client
+- Top destinations visuelles
 
----
+### 📊 Statistiques opérationnelles
+- Nombre de colis actifs / inactifs
+- Entrepôts actifs
+- Détection de statuts incohérents
+- Alertes visuelles automatiques
 
-## 📌 Fonctionnalités déjà en place
+### 📑 Rapport PDF professionnel
+- Génération dynamique de rapports de livraisons
+- Téléchargement en 1 clic
+- Export clair, élégant et complet pour l'impression ou l'archivage
 
-✅ Authentification sécurisée avec rôles  
-✅ Interface multi-layouts (Public / Client / Admin)  
-✅ Carte interactive : entrepôt + monde (filtrable mois/année)  
-✅ Top destinations & stats connectées  
-✅ Tableau de bord dynamique filtrable (statut, pays, client, période)  
-✅ Export PDF professionnel (logo, signature, totaux, tableau, footer)
+### 🧹 Filtres dynamiques avancés
+- Interface intuitive avec réinitialisation rapide
+- Filtrage par statut, période, pays
 
----
-
-## 📦 Roadmap à venir
-
-- [ ] Recherche intelligente globale (multi-champs, flou)
-- [ ] Alertes colis inactifs (+ e-mail automatique)
-- [ ] Journal d’activité (logs utilisateurs)
-- [ ] Dashboard analytique (recharts/nivo)
-- [ ] Timeline par expédition + fiche détaillée
-- [ ] Mode PWA partiel (scan hors-ligne pour intérimaires)
-- [ ] Droits d’accès ultra-fins par rôle
-- [ ] Archivage automatique après X jours
+### 📦 Tableau des livraisons
+- Affichage optimisé avec tri par date
+- Actions de mise à jour ou supervision
 
 ---
 
-## 🎨 Aperçu UI/UX
+## 🧠 Stack technique
 
-| Carte mondiale        | Tableau des livraisons     | Export PDF |
-|-----------------------|----------------------------|------------|
-| ![map preview](https://via.placeholder.com/300x150) | ![table preview](https://via.placeholder.com/300x150) | ![pdf preview](https://via.placeholder.com/300x150) |
+| Technologie      | Utilisation                         |
+|------------------|--------------------------------------|
+| **React**        | Frontend dynamique                  |
+| **TypeScript**   | Sécurité de typage et robustesse    |
+| **TailwindCSS**  | Design rapide, responsive et épuré  |
+| **Supabase**     | Auth, base de données PostgreSQL     |
+| **Leaflet.js**   | Carte interactive mondiale          |
+| **@react-pdf**   | Génération de rapports PDF          |
 
 ---
 
-## ⚙️ Démarrer le projet
+## 📷 Capture d'écran
+
+![image](https://github.com/user-attachments/assets/57b46fa9-4bab-44f7-9628-f43ba83f7264)
+
+
+---
+
+## ⚙️ Installation
 
 ```bash
 git clone https://github.com/Masterjeremysu/Optitrack.git
-cd optitrack
+cd Optitrack
 npm install
 npm run dev
+
+
+✅ À venir
+
+🎯 Historique des livraisons
+
+🌍 Zoom sur zones d’activité
+
+📥 Imports CSV de données
+
+🔐 Rôles utilisateurs (chef d’équipe, intérimaire, QHSE…)
+
+🧙‍♂️ Développement
+
+Créé par Jérémy avec passion et précision.
+
+
+📬 Contact
+Pour toute demande pro ou démo personnalisée :
+
+
+
+
