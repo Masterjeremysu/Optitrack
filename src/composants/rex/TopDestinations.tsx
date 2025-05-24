@@ -1,31 +1,45 @@
-// src/composants/rex/TopDestinations.tsx
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabase'
-
-type Destination = {
-  pays: string
-  total: number
-}
+import type { FiltresLivraison } from '../../hooks/useFiltrageLivraisons'
 
 type Props = {
   mois: string
   annee: string
+  filtres: FiltresLivraison
 }
 
-export default function TopDestinations({ mois, annee }: Props) {
-  const [top, setTop] = useState<Destination[]>([])
-  const [chargement, setChargement] = useState(true)
+type Destination = {
+  pays_destination: string
+  count: number
+}
+
+export default function TopDestinations({ mois, annee, filtres }: Props) {
+  const [destinations, setDestinations] = useState<Destination[]>([])
 
   useEffect(() => {
     const charger = async () => {
-      setChargement(true)
-
-      const { data, error } = await supabase
+      let query = supabase
         .from('expeditions')
-        .select('pays_destination, date_expedition')
+        .select('pays_destination, date_expedition, statut')
+
+      // 📦 Ajout des filtres dynamiques
+      if (filtres.statut) {
+        query = query.eq('statut', filtres.statut)
+      }
+      if (filtres.pays) {
+        query = query.ilike('pays_destination', `%${filtres.pays}%`)
+      }
+      if (filtres.dateMin) {
+        query = query.gte('date_expedition', filtres.dateMin)
+      }
+      if (filtres.dateMax) {
+        query = query.lte('date_expedition', filtres.dateMax)
+      }
+
+      const { data, error } = await query
 
       if (error) {
-        console.error('❌ Erreur Supabase', error.message)
+        console.error('Erreur chargement destinations:', error.message)
         return
       }
 
@@ -45,36 +59,27 @@ export default function TopDestinations({ mois, annee }: Props) {
         }
       })
 
-      const trié: Destination[] = Object.entries(comptage)
-        .map(([pays, total]) => ({ pays, total }))
-        .sort((a, b) => b.total - a.total)
+      const tri = Object.entries(comptage)
+        .map(([pays_destination, count]) => ({ pays_destination, count }))
+        .sort((a, b) => b.count - a.count)
         .slice(0, 10)
 
-      setTop(trié)
-      setChargement(false)
+      setDestinations(tri)
     }
 
     charger()
-  }, [mois, annee])
+  }, [mois, annee, filtres])
 
   return (
-    <div className="bg-white rounded-lg shadow p-4 w-full md:w-[400px]">
-      <h2 className="text-lg font-semibold text-blue-600 mb-4">🏆 Top 10 destinations</h2>
-
-      {chargement ? (
-        <p className="text-gray-500">Chargement...</p>
-      ) : top.length === 0 ? (
-        <p className="text-gray-400 italic">Aucune expédition trouvée</p>
-      ) : (
-        <ul className="space-y-2">
-          {top.map((p, i) => (
-            <li key={p.pays} className="flex justify-between text-sm">
-              <span className="font-medium text-gray-700">{i + 1}. {p.pays}</span>
-              <span className="text-blue-600">{p.total} expéditions</span>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className="bg-white rounded shadow p-4 w-full md:w-72 mt-6 md:mt-0">
+      <h4 className="text-sm font-semibold text-gray-700 mb-2">🏆 Top 10 destinations</h4>
+      <ul className="text-sm text-gray-600 space-y-1">
+        {destinations.map((d, i) => (
+          <li key={d.pays_destination}>
+            {i + 1}. {d.pays_destination} — {d.count} expéditions
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

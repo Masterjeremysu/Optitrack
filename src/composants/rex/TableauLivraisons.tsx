@@ -1,15 +1,21 @@
 // src/composants/rex/TableauLivraisons.tsx
 import type { Livraison } from '../../hooks/useFiltrageLivraisons'
 import { saveAs } from 'file-saver'
+import { updateStatutLivraison } from '../../services/supabaseLivraisons'
+import { toast } from 'sonner'
+
+
 
 
 
 type Props = {
   livraisons: Livraison[]
   chargement: boolean
+   onRefresh?: () => void
 }
 
-export default function TableauLivraisons({ livraisons, chargement }: Props) {
+export default function TableauLivraisons({ livraisons, chargement, onRefresh }: Props)
+ {
     const exporterCSV = () => {
   const lignes = [
     ['Client', 'Pays', 'Statut', 'Poids (kg)', 'Valeur (€)', 'Date'],
@@ -45,28 +51,60 @@ export default function TableauLivraisons({ livraisons, chargement }: Props) {
         <p className="text-gray-400 italic">Aucune livraison ne correspond aux filtres.</p>
       ) : (
         <table className="w-full text-sm text-left text-gray-700">
-          <thead className="bg-gray-100 text-xs uppercase text-gray-600">
-            <tr>
-              <th className="px-3 py-2">Client</th>
-              <th className="px-3 py-2">Pays</th>
-              <th className="px-3 py-2">Statut</th>
-              <th className="px-3 py-2">Poids</th>
-              <th className="px-3 py-2">Valeur (€)</th>
-              <th className="px-3 py-2">Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {livraisons.map((l) => (
-              <tr key={l.id} className="border-t hover:bg-gray-50">
-                <td className="px-3 py-2">{l.client}</td>
-                <td className="px-3 py-2">{l.pays_destination}</td>
-                <td className="px-3 py-2">{l.statut}</td>
-                <td className="px-3 py-2">{l.poids} kg</td>
-                <td className="px-3 py-2">{l.valeur.toFixed(2)}</td>
-                <td className="px-3 py-2">{new Date(l.date_expedition).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
+         <thead className="bg-gray-100 text-xs uppercase text-gray-600">
+  <tr>
+    <th className="px-3 py-2">Client</th>
+    <th className="px-3 py-2">Pays</th>
+    <th className="px-3 py-2">Statut</th>
+    <th className="px-3 py-2">Poids</th>
+    <th className="px-3 py-2">Valeur (€)</th>
+    <th className="px-3 py-2">Date</th>
+    <th className="px-3 py-2">Actions</th>
+  </tr>
+</thead>
+<tbody>
+  {livraisons.map((l) => (
+    <tr key={l.id} className="border-t hover:bg-gray-50">
+      <td className="px-3 py-2">{l.client}</td>
+      <td className="px-3 py-2">{l.pays_destination}</td>
+      <td className="px-3 py-2">{l.statut}</td>
+      <td className="px-3 py-2">{l.poids} kg</td>
+      <td className="px-3 py-2">{l.valeur.toFixed(2)}</td>
+      <td className="px-3 py-2">{new Date(l.date_expedition).toLocaleDateString()}</td>
+      <td className="px-3 py-2">
+        <div className="flex gap-2">
+          <select
+            aria-label="Modifier le statut de la livraison"
+            defaultValue={l.statut}
+            onChange={async (e) => {
+              const nouveauStatut = e.target.value
+              try {
+                await updateStatutLivraison(l.id, nouveauStatut)
+                toast.success(`Statut mis à jour vers "${nouveauStatut}"`)
+                onRefresh?.()
+              } catch (err) {
+                console.error(err)
+                toast.error('Erreur lors de la mise à jour')
+              }
+            }}
+            className="text-xs border px-1 py-0.5 rounded">
+            <option value="En transit">En transit</option>
+            <option value="Livré">Livré</option>
+            <option value="En attente">En attente</option>
+            <option value="Bloqué">Bloqué</option>
+          </select>
+          <button
+            onClick={() => alert(`📝 Voir fiche expédition : ${l.id}`)}
+            className="text-xs bg-gray-300 px-2 py-1 rounded hover:bg-gray-400"
+          >
+            📝 Voir
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       )}
     </div>

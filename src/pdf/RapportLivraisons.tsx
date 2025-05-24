@@ -1,13 +1,8 @@
 // src/pdf/RapportLivraisons.tsx
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Image
-} from '@react-pdf/renderer'
+import { Document, Page, Text, Image, View, StyleSheet } from '@react-pdf/renderer'
 import type { Livraison } from '../hooks/useFiltrageLivraisons'
+
+const parseNombre = (val?: number) => typeof val === 'number' ? val : 0
 
 const styles = StyleSheet.create({
   page: { padding: 40, fontSize: 11, fontFamily: 'Helvetica' },
@@ -30,26 +25,37 @@ type Props = {
 }
 
 export default function RapportLivraisons({ livraisons, mois, annee }: Props) {
-  const totalPoids = livraisons.reduce((acc, l) => acc + l.poids, 0)
-  const totalValeur = livraisons.reduce((acc, l) => acc + l.valeur, 0)
+  const totalPoids = livraisons.reduce((acc, l) => acc + parseNombre(l.poids), 0)
+  const totalValeur = livraisons.reduce((acc, l) => acc + parseNombre(l.valeur), 0)
+
+  const now = new Date()
+  const date = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}/${now.getFullYear()}`
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return '—'
+    const d = new Date(dateStr)
+    return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}/${d.getFullYear()}`
+  }
 
   return (
     <Document>
       <Page style={styles.page}>
-        {/* 🧠 En-tête avec logo + date */}
         <View style={styles.header}>
           <Image
             src="https://dummyimage.com/120x40/2b6cb0/ffffff&text=OptiTrack"
             style={styles.logo}
           />
-          <Text>Rapport généré le : {new Date().toLocaleDateString()}</Text>
+          <Text>Rapport généré le : {date}</Text>
         </View>
 
         <Text style={styles.titre}>
           📦 Rapport des livraisons {mois && annee ? `– ${mois}/${annee}` : ''}
         </Text>
 
-        {/* 🔠 Table */}
         <View style={[styles.table, styles.row, styles.headerRow]}>
           <Text style={styles.cell}>Client</Text>
           <Text style={styles.cell}>Pays</Text>
@@ -61,14 +67,12 @@ export default function RapportLivraisons({ livraisons, mois, annee }: Props) {
 
         {livraisons.map((l) => (
           <View style={styles.row} key={l.id}>
-            <Text style={styles.cell}>{l.client}</Text>
-            <Text style={styles.cell}>{l.pays_destination}</Text>
-            <Text style={styles.cell}>{l.statut}</Text>
-            <Text style={styles.cell}>{l.poids} kg</Text>
-            <Text style={styles.cell}>{l.valeur.toFixed(2)} €</Text>
-            <Text style={styles.cell}>
-              {new Date(l.date_expedition).toLocaleDateString()}
-            </Text>
+            <Text style={styles.cell}>{l.client ?? '—'}</Text>
+            <Text style={styles.cell}>{l.pays_destination ?? '—'}</Text>
+            <Text style={styles.cell}>{l.statut ?? '—'}</Text>
+            <Text style={styles.cell}>{l.poids != null ? `${l.poids} kg` : '—'}</Text>
+            <Text style={styles.cell}>{l.valeur != null ? `${l.valeur.toFixed(2)} €` : '—'}</Text>
+            <Text style={styles.cell}>{formatDate(l.date_expedition)}</Text>
           </View>
         ))}
 
@@ -76,7 +80,6 @@ export default function RapportLivraisons({ livraisons, mois, annee }: Props) {
           🔢 Total : {livraisons.length} livraisons · {totalPoids} kg · {totalValeur.toFixed(2)} €
         </Text>
 
-        {/* ✅ Pied de page pro */}
         <View style={styles.footer}>
           <Text>Responsable logistique : ____________________________</Text>
           <Text style={styles.signature}>© OptiTrack — www.optitrack.io</Text>

@@ -9,23 +9,21 @@ import { useFiltrageLivraisons } from '../../hooks/useFiltrageLivraisons'
 import type { FiltresLivraison } from '../../hooks/useFiltrageLivraisons'
 import CarteMonde from '../../composants/rex/CarteMonde'
 import TopDestinations from '../../composants/rex/TopDestinations'
-import { PDFDownloadLink } from '@react-pdf/renderer'
-import RapportLivraisons from '../../pdf/RapportLivraisons'
 
-
+import { useAnalyseLivraisons } from '../../hooks/useAnalyseLivraisons'
+import AlertesLivraisons from '../../composants/rex/AlertesLivraisons'
+import { telechargerPDF } from '../../utils/pdfRapport'
 
 export default function Rex() {
   const [rafraichi] = useState(false)
   const [vueMonde, setVueMonde] = useState(true)
   const [mois, setMois] = useState('')
-const [annee, setAnnee] = useState('')
+  const [annee, setAnnee] = useState('')
 
-const gererChangementDate = (m: string, y: string) => {
-  setMois(m)
-  setAnnee(y)
-}
-
-  
+  const gererChangementDate = (m: string, y: string) => {
+    setMois(m)
+    setAnnee(y)
+  }
 
   const [filtres, setFiltres] = useState<FiltresLivraison>({
     statut: '',
@@ -34,21 +32,39 @@ const gererChangementDate = (m: string, y: string) => {
     dateMax: '',
   })
 
-  const { livraisons, chargement } = useFiltrageLivraisons(filtres, mois, annee)
+  const [cleRafraichissement, setCleRafraichissement] = useState(0)
 
+  const { livraisons, chargement } = useFiltrageLivraisons(
+    filtres,
+    mois,
+    annee,
+    cleRafraichissement
+  )
+
+  const { actives, entrepots, inactifs, incoherents } =
+    useAnalyseLivraisons(livraisons)
 
   return (
     <LayoutRole>
       <TitrePage>Responsable Exploitation – Carte & Statistiques</TitrePage>
 
-      {/* Statistiques visuelles */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <CarteInfo titre="Livraisons actives" contenu="46" accent="bleu" />
-        <CarteInfo titre="Entrepôts actifs" contenu="8" accent="vert" />
-        <CarteInfo titre="Zones en alerte" contenu="2" accent="gris" />
+      {/* Statistiques */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <CarteInfo titre="Livraisons actives" contenu={actives.toString()} accent="bleu" />
+        <CarteInfo titre="Entrepôts actifs" contenu={entrepots.toString()} accent="vert" />
+        <CarteInfo
+          titre="Colis inactifs"
+          contenu={inactifs.toString()}
+          accent={inactifs > 0 ? 'rouge' : 'gris'}
+        />
+        <CarteInfo
+          titre="Statuts incohérents"
+          contenu={incoherents.toString()}
+          accent={incoherents > 0 ? 'orange' : 'gris'}
+        />
       </div>
 
-      {/* Choix de vue */}
+      {/* Changement de vue */}
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-md font-medium text-gray-700">
           {vueMonde ? '🌍 Vue Carte Monde' : '🏭 Vue Carte Entrepôt'}
@@ -61,13 +77,18 @@ const gererChangementDate = (m: string, y: string) => {
         </button>
       </div>
 
-      {/* Affichage cartes + top 10 */}
+      {/* Carte */}
       {vueMonde ? (
         <div className="md:flex md:gap-6 mb-6">
           <div className="flex-1">
-            <CarteMonde mois={mois} annee={annee} onChangeDate={gererChangementDate} />
+            <CarteMonde
+              mois={mois}
+              annee={annee}
+              filtres={filtres}
+              onChangeDate={gererChangementDate}
+            />
           </div>
-          <TopDestinations mois={mois} annee={annee} />
+          <TopDestinations mois={mois} annee={annee} filtres={filtres} />
         </div>
       ) : (
         <CartePoints rafraichi={rafraichi} />
@@ -82,25 +103,27 @@ const gererChangementDate = (m: string, y: string) => {
         }
       />
 
-      {/* Tableau filtré */}
-      <div className="flex justify-end mb-4">
-  <PDFDownloadLink
-  document={
-    <RapportLivraisons
-      livraisons={livraisons}
-      mois={mois}
-      annee={annee}
-    />
-  }
-  fileName={`rapport_livraisons_${mois}_${annee}.pdf`}
-  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
->
-  📄 Télécharger le rapport PDF
-</PDFDownloadLink>
+      {/* Bouton PDF */}
+      {livraisons.length > 0 && (
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={() => telechargerPDF(livraisons, mois, annee)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+          >
+            📄 Télécharger le rapport PDF
+          </button>
+        </div>
+      )}
 
-</div>
+      {/* Tableau */}
+      <TableauLivraisons
+        livraisons={livraisons}
+        chargement={chargement}
+        onRefresh={() => setCleRafraichissement(Date.now())}
+      />
 
-      <TableauLivraisons livraisons={livraisons} chargement={chargement} />
+      {/* Alertes */}
+      <AlertesLivraisons livraisons={livraisons} />
     </LayoutRole>
   )
 }

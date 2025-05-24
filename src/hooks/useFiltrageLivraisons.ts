@@ -21,8 +21,9 @@ export type FiltresLivraison = {
 
 export function useFiltrageLivraisons(
   filtres: FiltresLivraison,
-  mois?: string,
-  annee?: string
+  mois: string,
+  annee: string,
+  cleRafraichissement?: number
 ) {
   const [livraisons, setLivraisons] = useState<Livraison[]>([])
   const [chargement, setChargement] = useState(true)
@@ -36,11 +37,15 @@ export function useFiltrageLivraisons(
         .select('id, pays_destination, statut, client, valeur, poids, date_expedition')
         .order('date_expedition', { ascending: false })
 
-      if (filtres.statut) {
-        requete = requete.eq('statut', filtres.statut)
+      // Nettoyage des filtres
+      const statut = filtres.statut.trim().toLowerCase()
+      const pays = filtres.pays.trim().toLowerCase()
+
+      if (statut) {
+        requete = requete.ilike('statut', statut)
       }
-      if (filtres.pays) {
-        requete = requete.ilike('pays_destination', `%${filtres.pays}%`)
+      if (pays) {
+        requete = requete.ilike('pays_destination', `%${pays}%`)
       }
       if (filtres.dateMin) {
         requete = requete.gte('date_expedition', filtres.dateMin)
@@ -55,7 +60,7 @@ export function useFiltrageLivraisons(
         console.error('❌ Erreur chargement livraisons filtrées :', error.message)
         setLivraisons([])
       } else {
-        // 🧠 On filtre aussi côté JS selon le mois et l'année si fournis
+        // Filtrage JS sur mois + année
         const filtré = (data || []).filter((row) => {
           const date = new Date(row.date_expedition)
           const moisRow = String(date.getMonth() + 1).padStart(2, '0')
@@ -74,7 +79,7 @@ export function useFiltrageLivraisons(
     }
 
     charger()
-  }, [filtres, mois, annee])
+  }, [filtres, mois, annee, cleRafraichissement])
 
   return { livraisons, chargement }
 }

@@ -1,5 +1,5 @@
 // src/ui/carte/CarteInfo.tsx
-import { ReactNode } from 'react' // ❌
+import type { ReactNode } from 'react'
 
 
 
@@ -7,14 +7,17 @@ type Props = {
   titre: string
   icone?: ReactNode
   contenu: ReactNode
-  accent?: 'bleu' | 'vert' | 'gris'
+  accent?: 'gris' | 'bleu' | 'vert' | 'rouge' | 'orange'
+
 }
 
 export default function CarteInfo({ titre, icone, contenu, accent = 'gris' }: Props) {
-  const couleurs: Record<string, string> = {
-    bleu: 'border-blue-200 bg-blue-50',
-    vert: 'border-green-200 bg-green-50',
-    gris: 'border-gray-200 bg-gray-50',
+  const couleurs = {
+    gris: 'bg-gray-100 text-gray-800',
+    bleu: 'bg-blue-100 text-blue-800',
+    vert: 'bg-green-100 text-green-800',
+    rouge: 'bg-red-100 text-red-800',
+    orange: 'bg-orange-100 text-orange-800',
   }
 
   return (
