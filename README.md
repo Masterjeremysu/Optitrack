@@ -1,85 +1,115 @@
-# 📦 OptiTrack – Cartographie Logistique Intelligente
+# 🚀 OptiTrack
 
-Bienvenue dans **OptiTrack**, la solution SaaS de nouvelle génération pour la **visualisation, le suivi et l'analyse des livraisons** en temps réel.  
-Pensé pour les **responsables logistiques**, chefs d'équipe et dirigeants exigeants, OptiTrack permet de transformer un entrepôt ou un réseau d’expéditions en **carte vivante et interactive**.
+[![CI/CD](https://github.com/Masterjeremysu/optitrack/actions/workflows/main.yml/badge.svg)](https://github.com/Masterjeremysu/optitrack/actions)
+[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
 
----
-
-## 🚀 Fonctionnalités principales
-
-### 🧭 Carte interactive mondiale
-- Affiche les destinations des colis en temps réel
-- Filtres puissants : par mois, année, pays, statut, client
-- Top destinations visuelles
-
-### 📊 Statistiques opérationnelles
-- Nombre de colis actifs / inactifs
-- Entrepôts actifs
-- Détection de statuts incohérents
-- Alertes visuelles automatiques
-
-### 📑 Rapport PDF professionnel
-- Génération dynamique de rapports de livraisons
-- Téléchargement en 1 clic
-- Export clair, élégant et complet pour l'impression ou l'archivage
-
-### 🧹 Filtres dynamiques avancés
-- Interface intuitive avec réinitialisation rapide
-- Filtrage par statut, période, pays
-
-### 📦 Tableau des livraisons
-- Affichage optimisé avec tri par date
-- Actions de mise à jour ou supervision
+**OptiTrack** est un **SaaS logistique professionnel** conçu pour la **supervision intelligente des flux d’expédition**, à destination des entrepôts et plateformes de distribution.  
+Il s’adresse aux métiers du transport, de la gestion des flux, de la qualité, et de l’exploitation.
 
 ---
 
-## 🧠 Stack technique
+## 🧠 Objectif
 
-| Technologie      | Utilisation                         |
-|------------------|--------------------------------------|
-| **React**        | Frontend dynamique                  |
-| **TypeScript**   | Sécurité de typage et robustesse    |
-| **TailwindCSS**  | Design rapide, responsive et épuré  |
-| **Supabase**     | Auth, base de données PostgreSQL     |
-| **Leaflet.js**   | Carte interactive mondiale          |
-| **@react-pdf**   | Génération de rapports PDF          |
+Fournir une **interface unifiée, fluide et proactive** pour :
+- Visualiser l’état des expéditions en temps réel
+- Auditer automatiquement la qualité logistique
+- Corriger les anomalies avec intelligence assistée
+- Piloter les entrepôts et flux par rôle métier
 
 ---
 
-## 📷 Capture d'écran
+## 🧱 Technologies utilisées
 
-![image](https://github.com/user-attachments/assets/57b46fa9-4bab-44f7-9628-f43ba83f7264)
-
+| Domaine        | Outils                                             |
+|----------------|----------------------------------------------------|
+| **Frontend**   | React, TypeScript, TailwindCSS (v3.4.2)            |
+| **Backend**    | Supabase (PostgreSQL + Auth + RLS + Storage)       |
+| **Cartographie** | Leaflet (expéditions mondiales) + Carte SVG interne |
+| **PDF / IA**   | `@react-pdf/renderer`, moteur de correction IA métier |
+| **Déploiement**| Vercel                                             |
 
 ---
 
-## ⚙️ Installation
+## 👥 Architecture multi-rôles
+
+| Rôle             | Accès et permissions clés |
+|------------------|---------------------------|
+| 🧑‍🏭 Intérimaire   | Accès limité aux expéditions assignées |
+| 🚛 Chauffeur      | Visualisation + confirmation livraisons |
+| 🧭 REX            | Dashboard complet, carte, audit, correction |
+| 🧑‍💼 Directeur     | Supervision stratégique, reporting |
+| 🛡️ QHSE           | Données qualité et conformité |
+| 👨‍💻 Admin         | Gestion globale, structure, utilisateurs |
+
+---
+
+## ✅ Fonctionnalités intégrées
+
+### 🔐 Authentification
+- Auth Supabase sécurisée
+- Redirection dynamique selon rôle
+
+### 📁 Layouts dynamiques
+- Layout Public / Client / Admin
+
+### 📂 Menu contextuel
+- Affichage conditionnel des pages selon le rôle
+
+### 🗺️ Carte entrepôt interactive
+- Zones colorées selon les anomalies
+- Zoom zone / filtre anomalies
+
+### 🌍 Carte monde (Leaflet)
+- Points animés par livraison
+- Filtres : mois, année, statut, pays
+
+### 📦 Tableau des expéditions
+- Recherche, tri, édition
+- Export CSV
+- Badge ⚠️ pour colis suspects
+
+### 📋 Audit logistique
+- Score logistique + détails d’anomalies
+- Suggestions IA
+- Correction intelligente semi-automatisée
+- Historique `audits_logistiques`
+
+---
+
+## 📚 Historique des audits
+
+- Visualisation des audits passés
+- À venir :
+  - Téléchargement PDF
+  - Filtres date / score
+  - Comparateur entre audits
+
+---
+
+## 🛠️ Prochaines évolutions
+
+- [ ] Application réelle des corrections (✅/❌ puis "Appliquer")
+- [ ] Fiche produit enrichie pour chaque colis
+- [ ] Moteur de recherche globale intelligente
+- [ ] Notifications automatiques (email / Slack)
+- [ ] Editeur de règles IA no-code
+- [ ] Génération automatique de rapports PDF
+- [ ] Archivage automatique des colis dormants
+- [ ] Simulation IA auto-apprenante sur les données
+
+---
+
+## 🚧 Installation locale
 
 ```bash
-git clone https://github.com/Masterjeremysu/Optitrack.git
-cd Optitrack
+# 1. Cloner le projet
+git clone https://github.com/Masterjeremysu/optitrack.git
+
+# 2. Installer les dépendances
+cd optitrack
 npm install
+
+# 3. Lancer l’environnement de dev
 npm run dev
-
-
-✅ À venir
-
-🎯 Historique des livraisons
-
-🌍 Zoom sur zones d’activité
-
-📥 Imports CSV de données
-
-🔐 Rôles utilisateurs (chef d’équipe, intérimaire, QHSE…)
-
-🧙‍♂️ Développement
-
-Créé par Jérémy avec passion et précision.
-
-
-📬 Contact
-Pour toute demande pro ou démo personnalisée :
-
-
-
-
