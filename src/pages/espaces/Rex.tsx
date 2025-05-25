@@ -1,21 +1,23 @@
 import { useState } from 'react'
 import LayoutRole from '../../composants/layout/LayoutRole'
 import TitrePage from '../../ui/typographie/TitrePage'
-import CarteInfo from '../../ui/carte/CarteInfo'
-import CartePoints from '../../composants/carte/CartePoints'
 import FiltresLivraisons from '../../composants/rex/FiltresLivraisons'
 import TableauLivraisons from '../../composants/rex/TableauLivraisons'
 import { useFiltrageLivraisons } from '../../hooks/useFiltrageLivraisons'
 import type { FiltresLivraison } from '../../hooks/useFiltrageLivraisons'
 import CarteMonde from '../../composants/rex/CarteMonde'
 import TopDestinations from '../../composants/rex/TopDestinations'
-
+import CarteEntrepot from '../../composants/rex/CarteEntrepot'
 import { useAnalyseLivraisons } from '../../hooks/useAnalyseLivraisons'
 import AlertesLivraisons from '../../composants/rex/AlertesLivraisons'
 import { telechargerPDF } from '../../utils/pdfRapport'
+import RechercheGlobale from '../../composants/rex/RechercheGlobale'
+import StatsCartesEntrepots from '../../composants/rex/StatsCartesEntrepots'
+import CarteInfo from '../../ui/carte/CarteInfo'
+import GraphiqueAnomaliesParZone from '../../composants/rex/GraphiqueAnomaliesParZone'
+
 
 export default function Rex() {
-  const [rafraichi] = useState(false)
   const [vueMonde, setVueMonde] = useState(true)
   const [mois, setMois] = useState('')
   const [annee, setAnnee] = useState('')
@@ -30,6 +32,7 @@ export default function Rex() {
     pays: '',
     dateMin: '',
     dateMax: '',
+    entrepot: ''
   })
 
   const [cleRafraichissement, setCleRafraichissement] = useState(0)
@@ -41,12 +44,28 @@ export default function Rex() {
     cleRafraichissement
   )
 
-  const { actives, entrepots, inactifs, incoherents } =
-    useAnalyseLivraisons(livraisons)
+  const {
+  actives,
+  inactifs,
+  entrepots,
+  anomalies: {
+    colisDormants,
+    poidsIncoherent,
+    valeurNulle,
+    statutInvalide
+  }
+} = useAnalyseLivraisons(livraisons)
+
+
 
   return (
     <LayoutRole>
       <TitrePage>Responsable Exploitation – Carte & Statistiques</TitrePage>
+
+      <RechercheGlobale
+        livraisons={livraisons}
+        onFiltrer={(nouveauxFiltres) => setFiltres(nouveauxFiltres)}
+      />
 
       {/* Statistiques */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -58,10 +77,26 @@ export default function Rex() {
           accent={inactifs > 0 ? 'rouge' : 'gris'}
         />
         <CarteInfo
-          titre="Statuts incohérents"
-          contenu={incoherents.toString()}
-          accent={incoherents > 0 ? 'orange' : 'gris'}
-        />
+  titre="Colis dormants"
+  contenu={colisDormants.length.toString()}
+  accent={colisDormants.length > 0 ? 'orange' : 'gris'}
+/>
+<CarteInfo
+  titre="Poids incohérents"
+  contenu={poidsIncoherent.length.toString()}
+  accent={poidsIncoherent.length > 0 ? 'orange' : 'gris'}
+/>
+<CarteInfo
+  titre="Valeurs nulles"
+  contenu={valeurNulle.length.toString()}
+  accent={valeurNulle.length > 0 ? 'orange' : 'gris'}
+/>
+<CarteInfo
+  titre="Statuts non reconnus"
+  contenu={statutInvalide.length.toString()}
+  accent={statutInvalide.length > 0 ? 'orange' : 'gris'}
+/>
+
       </div>
 
       {/* Changement de vue */}
@@ -77,6 +112,9 @@ export default function Rex() {
         </button>
       </div>
 
+      {/* Statistiques par entrepôt */}
+      {!vueMonde && <StatsCartesEntrepots livraisons={livraisons} />}
+{!vueMonde && <GraphiqueAnomaliesParZone livraisons={livraisons} />}
       {/* Carte */}
       {vueMonde ? (
         <div className="md:flex md:gap-6 mb-6">
@@ -91,7 +129,7 @@ export default function Rex() {
           <TopDestinations mois={mois} annee={annee} filtres={filtres} />
         </div>
       ) : (
-        <CartePoints rafraichi={rafraichi} />
+        <CarteEntrepot livraisons={livraisons} />
       )}
 
       {/* Filtres dynamiques */}
@@ -99,7 +137,7 @@ export default function Rex() {
         filtres={filtres}
         onChange={setFiltres}
         onReinitialiser={() =>
-          setFiltres({ statut: '', pays: '', dateMin: '', dateMax: '' })
+          setFiltres({ statut: '', pays: '', dateMin: '', dateMax: '', entrepot: '' })
         }
       />
 
@@ -116,11 +154,13 @@ export default function Rex() {
       )}
 
       {/* Tableau */}
-      <TableauLivraisons
-        livraisons={livraisons}
-        chargement={chargement}
-        onRefresh={() => setCleRafraichissement(Date.now())}
-      />
+      <div id="tableau-livraisons">
+        <TableauLivraisons
+          livraisons={livraisons}
+          chargement={chargement}
+          onRefresh={() => setCleRafraichissement(Date.now())}
+        />
+      </div>
 
       {/* Alertes */}
       <AlertesLivraisons livraisons={livraisons} />

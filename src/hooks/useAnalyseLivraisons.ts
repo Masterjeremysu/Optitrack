@@ -1,32 +1,39 @@
-import { useEffect, useState } from 'react'
 import type { Livraison } from '../types/livraison'
 
-import { differenceInDays } from 'date-fns'
-
 export function useAnalyseLivraisons(livraisons: Livraison[]) {
-  const [actives, setActives] = useState(0)
-  const [entrepots, setEntrepots] = useState(0)
-  const [inactifs, setInactifs] = useState(0)
-  const [incoherents, setIncoherents] = useState(0)
+  const actives = livraisons.filter((l) => l.statut === 'en cours').length
+  const inactifs = livraisons.filter((l) => l.statut === 'en cours' && estInactif(l)).length
+  const incoherents = livraisons.filter((l) => !['en cours', 'livré', 'retard', 'annulé'].includes(l.statut)).length
 
-  useEffect(() => {
-    const actifs = livraisons.filter(l => l.statut !== 'Livré')
-    setActives(actifs.length)
+  const entrepotsUniques = new Set(livraisons.map((l) => l.entrepot).filter(Boolean))
+  const entrepots = entrepotsUniques.size
 
-    const entrepotsUniques = new Set(livraisons.map(l => l.entrepot_id)).size
-    setEntrepots(entrepotsUniques)
+  const anomalies = {
+  colisDormants: livraisons.filter(estInactif),
+  poidsIncoherent: livraisons.filter(
+    (l) => typeof l.poids === 'number' && (l.poids <= 0 || l.poids > 500)
+  ),
+  valeurNulle: livraisons.filter(
+    (l) => typeof l.valeur === 'number' && l.valeur <= 0
+  ),
+  statutInvalide: livraisons.filter(
+    (l) => !['en cours', 'livré', 'retard', 'annulé'].includes(l.statut)
+  ),
+}
 
-    const inactifsTrouvés = livraisons.filter(l => {
-      const date = new Date(l.date_expedition)
-      return l.statut !== 'Livré' && differenceInDays(new Date(), date) > 3
-    }).length
-    setInactifs(inactifsTrouvés)
 
-    const incoherentsTrouvés = livraisons.filter(l => {
-      return l.statut === 'Livré' && !l.date_livraison
-    }).length
-    setIncoherents(incoherentsTrouvés)
-  }, [livraisons])
+  return {
+    actives,
+    inactifs,
+    incoherents,
+    entrepots,
+    anomalies,
+  }
+}
 
-  return { actives, entrepots, inactifs, incoherents }
+function estInactif(livraison: Livraison): boolean {
+  const dateExp = new Date(livraison.date_expedition)
+  const now = new Date()
+  const ecartJours = Math.floor((now.getTime() - dateExp.getTime()) / (1000 * 60 * 60 * 24))
+  return livraison.statut === 'en cours' && ecartJours >= 5
 }

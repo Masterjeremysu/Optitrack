@@ -12,6 +12,7 @@ export type Livraison = {
     modifie_par?: string
     date_modification?: string
     date_creation?: string
+     entrepot?: string
    
   // ... autres champs si besoin
 }

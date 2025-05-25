@@ -1,5 +1,5 @@
 // src/composants/layout/LayoutGlobal.tsx
-import { ReactNode } from 'react' // ❌
+import type { ReactNode } from 'react'
 
 
 import HeaderGlobal from './HeaderGlobal'

@@ -17,6 +17,7 @@ export type FiltresLivraison = {
   pays: string
   dateMin: string
   dateMax: string
+  entrepot?: string
 }
 
 export function useFiltrageLivraisons(
@@ -36,6 +37,10 @@ export function useFiltrageLivraisons(
         .from('expeditions')
         .select('id, pays_destination, statut, client, valeur, poids, date_expedition')
         .order('date_expedition', { ascending: false })
+        if (filtres.entrepot) {
+  requete = requete.eq('entrepot', filtres.entrepot)
+}
+
 
       // Nettoyage des filtres
       const statut = filtres.statut.trim().toLowerCase()
@@ -72,7 +77,14 @@ export function useFiltrageLivraisons(
           return matchMois && matchAnnee
         })
 
-        setLivraisons(filtré)
+        // Injection temporaire d’un champ "entrepot" aléatoire pour la carte
+const avecEntrepots = filtré.map((l, i) => ({
+  ...l,
+  entrepot: ['A1', 'A2', 'A3', 'B1', 'B2', 'C1'][i % 6],
+}))
+
+setLivraisons(avecEntrepots)
+        console.log(`📦 Chargé ${filtré.length} livraisons pour ${mois}/${annee}`)
       }
 
       setChargement(false)

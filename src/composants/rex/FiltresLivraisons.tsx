@@ -5,6 +5,7 @@ type Props = {
     pays: string
     dateMin: string
     dateMax: string
+     entrepot?: string
   }
   onChange: (nouveauxFiltres: Props['filtres']) => void
   onReinitialiser: () => void
@@ -43,6 +44,25 @@ export default function FiltresLivraisons({ filtres, onChange, onReinitialiser }
           placeholder="France, Italie..."
         />
       </div>
+      <div>
+  <label htmlFor="filtre-entrepot" className="block text-sm font-medium mb-1">Entrepôt</label>
+  <select
+    id="filtre-entrepot"
+    title="Filtrer par entrepôt"
+    className="w-full border border-gray-300 rounded px-2 py-1"
+    value={filtres.entrepot || ''}
+    onChange={(e) => onChange({ ...filtres, entrepot: e.target.value })}
+  >
+    <option value="">Tous</option>
+    <option value="A1">A1</option>
+    <option value="A2">A2</option>
+    <option value="A3">A3</option>
+    <option value="B1">B1</option>
+    <option value="B2">B2</option>
+    <option value="C1">C1</option>
+  </select>
+</div>
+
 
       <div>
         {/* DATE MIN */}
@@ -70,7 +90,9 @@ export default function FiltresLivraisons({ filtres, onChange, onReinitialiser }
   onChange={(e) => onChange({ ...filtres, dateMax: e.target.value })}
 />
 
+
       </div>
+      
 
       <div className="flex gap-2">
         <button
