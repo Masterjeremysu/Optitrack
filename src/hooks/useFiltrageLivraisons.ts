@@ -1,4 +1,3 @@
-// src/hooks/useFiltrageLivraisons.ts
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
@@ -10,6 +9,7 @@ export type Livraison = {
   valeur: number
   poids: number
   date_expedition: string
+  entrepot?: string
 }
 
 export type FiltresLivraison = {
@@ -24,7 +24,7 @@ export function useFiltrageLivraisons(
   filtres: FiltresLivraison,
   mois: string,
   annee: string,
-  cleRafraichissement?: number
+  cleRafraichissement: number = 0
 ) {
   const [livraisons, setLivraisons] = useState<Livraison[]>([])
   const [chargement, setChargement] = useState(true)
@@ -37,10 +37,10 @@ export function useFiltrageLivraisons(
         .from('expeditions')
         .select('id, pays_destination, statut, client, valeur, poids, date_expedition')
         .order('date_expedition', { ascending: false })
-        if (filtres.entrepot) {
-  requete = requete.eq('entrepot', filtres.entrepot)
-}
 
+      if (filtres.entrepot) {
+        requete = requete.eq('entrepot', filtres.entrepot)
+      }
 
       // Nettoyage des filtres
       const statut = filtres.statut.trim().toLowerCase()
@@ -70,21 +70,17 @@ export function useFiltrageLivraisons(
           const date = new Date(row.date_expedition)
           const moisRow = String(date.getMonth() + 1).padStart(2, '0')
           const anneeRow = String(date.getFullYear())
-
-          const matchMois = !mois || moisRow === mois
-          const matchAnnee = !annee || anneeRow === annee
-
-          return matchMois && matchAnnee
+          return (!mois || moisRow === mois) && (!annee || anneeRow === annee)
         })
 
-        // Injection temporaire d’un champ "entrepot" aléatoire pour la carte
-const avecEntrepots = filtré.map((l, i) => ({
-  ...l,
-  entrepot: ['A1', 'A2', 'A3', 'B1', 'B2', 'C1'][i % 6],
-}))
+        // Ajout temporaire de l’entrepôt (à remplacer plus tard)
+        const avecEntrepots = filtré.map((l, i) => ({
+          ...l,
+          entrepot: ['A1', 'A2', 'A3', 'B1', 'B2', 'C1'][i % 6]
+        }))
 
-setLivraisons(avecEntrepots)
-        console.log(`📦 Chargé ${filtré.length} livraisons pour ${mois}/${annee}`)
+        setLivraisons(avecEntrepots)
+        console.log(`📦 ${filtré.length} livraisons chargées (refresh ${cleRafraichissement})`)
       }
 
       setChargement(false)
