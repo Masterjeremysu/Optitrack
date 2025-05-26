@@ -39,7 +39,10 @@ export default function FicheColis({ colis, onClose, onLivraisonEffectuée }: Pr
         <p><strong>Adresse :</strong> {colis.adresse}</p>
         <p><strong>Valeur :</strong> {colis.valeur} €</p>
         <p><strong>Poids :</strong> {colis.poids} kg</p>
+        <p><strong>Entrepôt :</strong> {colis.entrepot || 'Non renseigné'}</p>
         <p><strong>Statut actuel :</strong> <span className="font-medium text-blue-600">{colis.statut}</span></p>
+        <p><strong>Entrepôt :</strong> {colis.entrepot}</p>
+        <p><strong>Pays de destination :</strong> {colis.pays_destination}</p>
 
         <div className="flex gap-2 pt-3">
           <button

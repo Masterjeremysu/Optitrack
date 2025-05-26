@@ -22,22 +22,22 @@ export default function CarteTournee() {
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
       
       {points.map((p) => (
-        <Marker
-          key={p.id}
-          position={[p.lat, p.lon]}
-          icon={L.icon({
-            iconUrl: p.statut === 'livré' ? '/green-marker.png' : '/blue-marker.png',
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-          })}
-        >
-          <Popup>
-            <strong>📦 {p.client}</strong><br />
-            {p.adresse}<br />
-            <span className="text-xs">Statut : {p.statut}</span>
-          </Popup>
-        </Marker>
-      ))}
+  <Marker
+  key={p.id}
+  position={[p.lat, p.lon]}
+  icon={L.icon({
+    iconUrl: p.statut === 'livré' ? '/marker-vert.png' : '/marker-bleu.png',
+    iconSize: [30, 41],
+    iconAnchor: [15, 41],
+  })}
+>
+  <Popup>
+    <strong>📦 {p.client}</strong><br />
+    {p.adresse}<br />
+    <span className="text-xs">Statut : {p.statut}</span>
+  </Popup>
+</Marker>
+))}
 
       <Polyline positions={itineraire} color="blue" />
     </MapContainer>

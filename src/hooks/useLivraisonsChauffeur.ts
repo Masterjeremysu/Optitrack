@@ -10,7 +10,8 @@ export type LivraisonChauffeur = {
   poids: number
   valeur: number
   date_expedition: string
-  pays_destination: string  // ✅ Ajout manquant ici
+  pays_destination: string 
+ entrepot: string | null
   coords?: [number, number]
 }
 

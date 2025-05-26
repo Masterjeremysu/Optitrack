@@ -12,7 +12,7 @@ export type Colis = {
   date_expedition: string
   date_livraison?: string | null
   chauffeur_id?: string | null
-  entrepot?: string | null
+  entrepot: string | null
   lat?: number | null
   lon?: number | null
    pays_destination: string
