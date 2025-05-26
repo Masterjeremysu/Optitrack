@@ -1,4 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet'
+import L from 'leaflet'
 import { useTourneeChauffeur } from '../../hooks/useTourneeChauffeur'
 import { useProfilConnecte } from '../../hooks/useProfilConnecte'
 
@@ -19,8 +20,17 @@ export default function CarteTournee() {
   return (
     <MapContainer center={center} zoom={12} className="h-[500px] w-full rounded shadow">
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+      
       {points.map((p) => (
-        <Marker key={p.id} position={[p.lat, p.lon]}>
+        <Marker
+          key={p.id}
+          position={[p.lat, p.lon]}
+          icon={L.icon({
+            iconUrl: p.statut === 'livré' ? '/green-marker.png' : '/blue-marker.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+          })}
+        >
           <Popup>
             <strong>📦 {p.client}</strong><br />
             {p.adresse}<br />
@@ -28,6 +38,7 @@ export default function CarteTournee() {
           </Popup>
         </Marker>
       ))}
+
       <Polyline positions={itineraire} color="blue" />
     </MapContainer>
   )

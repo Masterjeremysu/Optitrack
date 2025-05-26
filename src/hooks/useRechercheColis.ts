@@ -15,6 +15,7 @@ export type Colis = {
   entrepot?: string | null
   lat?: number | null
   lon?: number | null
+   pays_destination: string
 }
 
 export function useRechercheColis() {
@@ -26,7 +27,7 @@ export function useRechercheColis() {
 
     const { data, error } = await supabase
       .from('expeditions')
-      .select('id, client, adresse, statut, poids, valeur, date_expedition, date_livraison, chauffeur_id, entrepot, lat, lon')
+      .select('id, client, adresse, statut, poids, valeur, date_expedition, date_livraison, chauffeur_id, entrepot, lat, lon, pays_destination')
       .eq('id', code)
       .single()
 

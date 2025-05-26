@@ -1,13 +1,13 @@
-// src/hooks/useRedirectionParRole.ts
 import { useEffect, useState } from 'react'
 import { useSession, useUser } from '@supabase/auth-helpers-react'
 import { supabase } from '../lib/supabase'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export function useRedirectionParRole() {
   const session = useSession()
   const user = useUser()
   const navigate = useNavigate()
+  const location = useLocation()
   const [dejaRedirige, setDejaRedirige] = useState(false)
 
   useEffect(() => {
@@ -22,7 +22,6 @@ export function useRedirectionParRole() {
 
     const chargerRoleEtRediriger = async () => {
       console.log('📡 Requête vers Supabase pour récupérer le rôle...')
-
       const { data, error } = await supabase
         .from('profils')
         .select('role')
@@ -30,11 +29,9 @@ export function useRedirectionParRole() {
         .single()
 
       if (error || !data) {
-        console.error('❌ Erreur récupération du rôle :', error)
+        console.warn("🔴 Impossible de récupérer le rôle", error)
         return
       }
-
-      console.log('✅ Rôle récupéré :', data.role)
 
       const destinationMap = {
         intérimaire: '/espaces/interimaire',
@@ -49,15 +46,17 @@ export function useRedirectionParRole() {
       const role = data.role as keyof typeof destinationMap
       const destinationFinale = destinationMap[role]
 
-      if (destinationFinale) {
-        console.log('➡️ Redirection vers :', destinationFinale)
+      console.log('✅ Rôle récupéré :', role)
+      console.log('🧭 Page actuelle :', location.pathname)
+      console.log('➡️ Destination :', destinationFinale)
+
+      // 💥 Évite les redirections vers la même page
+      if (destinationFinale && location.pathname !== destinationFinale) {
         setDejaRedirige(true)
         navigate(destinationFinale)
-      } else {
-        console.warn('⚠️ Aucun chemin défini pour ce rôle :', data.role)
       }
     }
 
     chargerRoleEtRediriger()
-  }, [session, user, dejaRedirige, navigate])
+  }, [session, user, dejaRedirige, navigate, location])
 }
