@@ -3,8 +3,10 @@ import { useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useNavigate } from 'react-router-dom'
 import BoutonPrincipal from '../ui/bouton/BoutonPrincipal'
+import { useRedirectionParRole } from '../hooks/useRedirectionParRole'
 
 export default function Connexion() {
+   useRedirectionParRole()
   const [email, setEmail] = useState('')
   const [motDePasse, setMotDePasse] = useState('')
   const [nom, setNom] = useState('')

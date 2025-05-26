@@ -6,9 +6,11 @@ import ListeColisJour from '../../../composants/chauffeur/ListeColisJour'
 import HistoriqueLivraisons from '../../../composants/chauffeur/HistoriqueLivraisons'
 import SignalementColis from '../../../composants/chauffeur/SignalementColis'
 import TitrePage from '../../../ui/typographie/TitrePage'
+import { useRedirectionSiDeconnecte } from '../../../hooks/useRedirectionSiDeconnecte'
 
 export default function Chauffeur() {
   const { profil } = useProfilConnecte()
+  useRedirectionSiDeconnecte()
 
   return (
     <LayoutRole>
