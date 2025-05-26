@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase'
 import logo from '../../assets/logo.png'
 
 export default function HeaderGlobal() {
-  const { nom, role } = useProfilConnecte()
+  const { profil, role } = useProfilConnecte()
   const navigate = useNavigate()
 
   const seDeconnecter = async () => {
@@ -30,9 +30,9 @@ export default function HeaderGlobal() {
 
       {/* 👤 Utilisateur connecté */}
       <div className="flex items-center gap-4 text-sm text-gray-600">
-        👤 <span className="font-medium">{nom || 'Invité'}</span>
+        👤 <span className="font-medium">{profil?.nom || 'Invité'}</span>
         {role && <span className="text-gray-400">({role})</span>}
-        {nom && (
+        {profil && (
           <button
             onClick={seDeconnecter}
             className="text-blue-600 font-semibold hover:underline ml-2"

@@ -2,25 +2,40 @@ import { useEffect, useState } from 'react'
 import { useUser } from '@supabase/auth-helpers-react'
 import { supabase } from '../lib/supabase'
 
-export function useProfilConnecte() {
+export type ProfilConnecte = {
+  id: string
+  nom: string
+  prenom: string
+  role: string
+}
+
+export function useProfilConnecte(): {
+  profil: ProfilConnecte | null
+  role: string | null
+  chargement: boolean
+} {
   const user = useUser()
-  const [role, setRole] = useState<string | null>(null)
-  const [nom, setNom] = useState<string | null>(null)
+  const [profil, setProfil] = useState<ProfilConnecte | null>(null)
   const [chargement, setChargement] = useState(true)
 
   useEffect(() => {
-    if (!user) return
-
     const chargerProfil = async () => {
-      const { data } = await supabase
+      if (!user?.id) {
+        setChargement(false)
+        return
+      }
+
+      const { data, error } = await supabase
         .from('profils')
-        .select('nom, role')
+        .select('id, nom, prenom, role')
         .eq('id', user.id)
         .single()
 
-      if (data) {
-        setNom(data.nom)
-        setRole(data.role)
+      if (error) {
+        console.error('Erreur chargement profil connecté:', error)
+        setProfil(null)
+      } else {
+        setProfil(data as ProfilConnecte)
       }
 
       setChargement(false)
@@ -29,5 +44,9 @@ export function useProfilConnecte() {
     chargerProfil()
   }, [user])
 
-  return { role, nom, chargement }
+  return {
+    profil,
+    role: profil?.role || null,
+    chargement
+  }
 }
