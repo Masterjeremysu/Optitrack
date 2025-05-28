@@ -2,15 +2,23 @@ import { useState } from 'react'
 import { useRechercheColis } from '../../hooks/useRechercheColis'
 import FicheColis from './FicheColis'
 
-export default function ScannerColis() {
+type Props = {
+  onColisDetecte: (colis: { id: string }) => void
+}
+
+export default function ScannerColis({ onColisDetecte }: Props) {
   const [code, setCode] = useState('')
   const { colis, chercher, loading } = useRechercheColis()
   const [afficherFiche, setAfficherFiche] = useState(false)
 
   const lancerRecherche = async () => {
-    await chercher(code)
+  await chercher(code)
+  if (colis) {
+    onColisDetecte(colis) // ✅ remonte à Chauffeur.tsx
     setAfficherFiche(true)
   }
+}
+
 
   return (
     <div className="space-y-2 text-sm">

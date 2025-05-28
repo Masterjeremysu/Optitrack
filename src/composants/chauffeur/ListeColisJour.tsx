@@ -12,13 +12,20 @@ export default function ListeColisJour() {
   useEffect(() => {
     const chargerColis = async () => {
       setChargement(true)
+
       const { data, error } = await supabase
         .from('expeditions')
         .select('*')
         .eq('statut', 'en cours')
         .order('date_expedition', { ascending: true })
 
-      if (!error && data) setColis(data)
+      if (error) {
+        console.error('Erreur chargement colis:', error.message)
+        setColis([])
+      } else {
+        setColis(data || [])
+      }
+
       setChargement(false)
     }
 
@@ -30,7 +37,7 @@ export default function ListeColisJour() {
       {chargement ? (
         <p className="italic text-gray-500">Chargement...</p>
       ) : colis.length === 0 ? (
-        <p className="text-gray-500">Aucun colis à livrer aujourd’hui.</p>
+        <p className="text-gray-500">Aucune livraison prévue aujourd’hui.</p>
       ) : (
         <ul className="space-y-1">
           {colis.map((c) => (

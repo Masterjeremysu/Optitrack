@@ -1,11 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  darkMode: 'class', // ✅ permet d’activer le mode nuit manuellement
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      // Personnalisation si tu veux des couleurs supplémentaires, etc.
+    },
   },
   plugins: [],
 }
