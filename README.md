@@ -1,115 +1,110 @@
-# 🚀 OptiTrack
+# 🚚 OptiTrack – Supervision logistique augmentée
 
-[![CI/CD](https://github.com/Masterjeremysu/optitrack/actions/workflows/main.yml/badge.svg)](https://github.com/Masterjeremysu/optitrack/actions)
-[![Deploy on Vercel](https://vercel.com/button)](https://vercel.com)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-
-**OptiTrack** est un **SaaS logistique professionnel** conçu pour la **supervision intelligente des flux d’expédition**, à destination des entrepôts et plateformes de distribution.  
-Il s’adresse aux métiers du transport, de la gestion des flux, de la qualité, et de l’exploitation.
+**OptiTrack** est une application SaaS ultra moderne de supervision logistique, conçue pour les entrepôts, les transporteurs et les équipes terrain.  
+Pensée **par un pro du métier**, développée **avec des outils puissants**, et designée **avec précision**, elle offre une cartographie logistique interactive, une gestion multi-rôles, et une réactivité temps réel.
 
 ---
 
-## 🧠 Objectif
+## ✨ Fonctionnalités principales
 
-Fournir une **interface unifiée, fluide et proactive** pour :
-- Visualiser l’état des expéditions en temps réel
-- Auditer automatiquement la qualité logistique
-- Corriger les anomalies avec intelligence assistée
-- Piloter les entrepôts et flux par rôle métier
+### 🔍 Supervision REX
+- Vue globale des livraisons avec filtres par statut, client, pays, date, poids, valeur…
+- Tri intelligent + recherches avancées
+- Anomalies détectées automatiquement (⚠)
 
----
+### 🧭 Carte monde & entrepôt interactive
+- Visualisation 2D/3D des colis livrés / à livrer
+- Carte entrepôt avec zoom, filtres, détection visuelle des alertes
+- Points animés + interface tactile friendly
 
-## 🧱 Technologies utilisées
+### 📦 Interface Chauffeur
+- Démarrage / Clôture de tournée
+- Scan colis + validation
+- Signature client + photo de livraison
+- Historique de la journée
+- Signalement d’incident & reprogrammation
 
-| Domaine        | Outils                                             |
-|----------------|----------------------------------------------------|
-| **Frontend**   | React, TypeScript, TailwindCSS (v3.4.2)            |
-| **Backend**    | Supabase (PostgreSQL + Auth + RLS + Storage)       |
-| **Cartographie** | Leaflet (expéditions mondiales) + Carte SVG interne |
-| **PDF / IA**   | `@react-pdf/renderer`, moteur de correction IA métier |
-| **Déploiement**| Vercel                                             |
+### 📊 Audit Logistique
+- Analyse automatique des colis inactifs ou incohérents
+- Suggestions de corrections IA validables
+- Archivage & PDF téléchargeables
+- Historique des audits comparables
 
----
-
-## 👥 Architecture multi-rôles
-
-| Rôle             | Accès et permissions clés |
-|------------------|---------------------------|
-| 🧑‍🏭 Intérimaire   | Accès limité aux expéditions assignées |
-| 🚛 Chauffeur      | Visualisation + confirmation livraisons |
-| 🧭 REX            | Dashboard complet, carte, audit, correction |
-| 🧑‍💼 Directeur     | Supervision stratégique, reporting |
-| 🛡️ QHSE           | Données qualité et conformité |
-| 👨‍💻 Admin         | Gestion globale, structure, utilisateurs |
+### 🔐 Authentification Supabase
+- Gestion multi-rôles sécurisée :
+  `chauffeur`, `chef_d_equipe`, `REX`, `QHSE`, `directeur`, `intérimaire`, `admin`
+- Redirections intelligentes et accès restreints
 
 ---
 
-## ✅ Fonctionnalités intégrées
+## 🧱 Stack technique
 
-### 🔐 Authentification
-- Auth Supabase sécurisée
-- Redirection dynamique selon rôle
-
-### 📁 Layouts dynamiques
-- Layout Public / Client / Admin
-
-### 📂 Menu contextuel
-- Affichage conditionnel des pages selon le rôle
-
-### 🗺️ Carte entrepôt interactive
-- Zones colorées selon les anomalies
-- Zoom zone / filtre anomalies
-
-### 🌍 Carte monde (Leaflet)
-- Points animés par livraison
-- Filtres : mois, année, statut, pays
-
-### 📦 Tableau des expéditions
-- Recherche, tri, édition
-- Export CSV
-- Badge ⚠️ pour colis suspects
-
-### 📋 Audit logistique
-- Score logistique + détails d’anomalies
-- Suggestions IA
-- Correction intelligente semi-automatisée
-- Historique `audits_logistiques`
+- **Frontend** : React + TypeScript + TailwindCSS 3.4.2
+- **Backend** : Supabase (Auth, BDD PostgreSQL, Storage, RLS)
+- **PDF** : `@react-pdf/renderer`
+- **Cartographie** : Leaflet + Supabase GeoJSON
+- **Emailing** : Resend (à venir)
+- **Déploiement** : Vercel (frontend) + Supabase (backend)
 
 ---
 
-## 📚 Historique des audits
-
-- Visualisation des audits passés
-- À venir :
-  - Téléchargement PDF
-  - Filtres date / score
-  - Comparateur entre audits
-
----
-
-## 🛠️ Prochaines évolutions
-
-- [ ] Application réelle des corrections (✅/❌ puis "Appliquer")
-- [ ] Fiche produit enrichie pour chaque colis
-- [ ] Moteur de recherche globale intelligente
-- [ ] Notifications automatiques (email / Slack)
-- [ ] Editeur de règles IA no-code
-- [ ] Génération automatique de rapports PDF
-- [ ] Archivage automatique des colis dormants
-- [ ] Simulation IA auto-apprenante sur les données
-
----
-
-## 🚧 Installation locale
+## 🚀 Démarrer le projet
 
 ```bash
-# 1. Cloner le projet
-git clone https://github.com/Masterjeremysu/optitrack.git
+# 1. Cloner le repo
+git clone https://github.com/TON_NOM/OptiTrack.git
+cd optitrack
 
 # 2. Installer les dépendances
-cd optitrack
 npm install
 
-# 3. Lancer l’environnement de dev
+# 3. Lancer le serveur
 npm run dev
+📁 Renomme .env.example en .env.local et configure :
+
+env
+Copier
+Modifier
+VITE_SUPABASE_URL=https://<TON_INSTANCE>.supabase.co
+VITE_SUPABASE_ANON_KEY=...
+📁 Arborescence du projet
+bash
+Copier
+Modifier
+optitrack/
+├─ src/
+│  ├─ pages/              # Pages React (admin, client, chauffeur...)
+│  ├─ composants/         # Composants UI modulaires par rôle
+│  ├─ hooks/              # Hooks métier (useTournee, useAudit...)
+│  ├─ lib/                # Connexion Supabase
+│  ├─ pdf/                # Générateurs PDF
+│  ├─ styles/             # Tailwind + animations
+
+
+💡 À venir
+🔁 Sync offline avec IndexedDB pour les tournées hors réseau
+
+🧠 IA embarquée pour optimiser les tournées
+
+📱 PWA installable sur terminaux Zebra
+
+🛰 Vue Géo live des livraisons en cours
+
+🧑‍💻 Développeur
+
+👤 Jeremy
+Créateur de solutions métiers réelles, fondées sur la performance terrain.
+
+“Je crée des outils concrets, rapides, et conçus pour durer.”
+
+⭐️ Tu aimes ce projet ?
+
+N'hésite pas à :
+
+🌟 Laisser une étoile
+
+🐛 Proposer une issue ou une amélioration
+
+🤝 Me contacter pour des projets logistiques sur mesure
+
+OptiTrack – Quand la logistique devient intelligente.
